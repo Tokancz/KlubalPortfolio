@@ -1,0 +1,201 @@
+/* ============================================================
+   KLUBAL 3D — DESIGN SYSTEM
+   colors_and_type.css
+   Technical / cyberpunk HUD aesthetic. Red + black, violet
+   secondary, project-driven accents (cyan, magenta, brass).
+   ============================================================ */
+
+/* ---- FONTS (Google Fonts CDN — see README font note) ----
+   Display : Chakra Petch  (squared technical)
+   Body    : Space Grotesk (clean technical grotesque)
+   Mono    : JetBrains Mono (data readouts / HUD labels)        */
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+:root {
+  /* ---------- CORE PALETTE ---------- */
+  /* Near-black surfaces, cool blue-violet tint */
+  --bg-0:   #06070A;   /* deepest void  */
+  --bg-1:   #0B0D12;   /* page          */
+  --bg-2:   #11141B;   /* panel         */
+  --bg-3:   #181C26;   /* raised / card */
+  --bg-4:   #232836;   /* hover / input */
+
+  /* Foreground / neutrals (cool grey ramp) */
+  --fg-0:   #F4F6FA;   /* primary text  */
+  --fg-1:   #C2C8D4;   /* secondary     */
+  --fg-2:   #818A9C;   /* muted / meta  */
+  --fg-3:   #525A6B;   /* faint / disabled */
+  --fg-4:   #333A48;   /* hairline-on-dark text */
+
+  /* ---------- PRIMARY: SIGNAL RED ---------- */
+  --red-bright: #FF4B45; /* hover / glow peak */
+  --red:        #FF2E33; /* primary accent    */
+  --red-deep:   #C8131C; /* pressed / deep    */
+  --red-dim:    #5A1418; /* tonal fill        */
+  --red-ghost:  rgba(255, 46, 51, 0.12); /* wash */
+
+  /* ---------- SECONDARY: ELECTRIC VIOLET ---------- */
+  --violet-bright: #B57BFF;
+  --violet:        #9A4DFF;
+  --violet-deep:   #6A1FD0;
+  --violet-ghost:  rgba(154, 77, 255, 0.12);
+
+  /* ---------- PROJECT-DRIVEN ACCENTS ---------- */
+  --cyan:    #2FB6FF;  /* deluxo neon underglow */
+  --magenta: #FF3D8A;  /* hope rose planet      */
+  --brass:   #E0A23C;  /* steampunk gears       */
+  --acid:    #B6FF3C;  /* rare hazard highlight */
+
+  /* ---------- SEMANTIC ---------- */
+  --success: #35D07F;
+  --warning: #E0A23C;
+  --danger:  #FF2E33;
+  --info:    #2FB6FF;
+
+  --accent:        var(--red);
+  --accent-bright: var(--red-bright);
+  --accent-deep:   var(--red-deep);
+
+  /* ---------- BORDERS / HAIRLINES ---------- */
+  --line-1: rgba(255, 255, 255, 0.07);  /* subtle divider */
+  --line-2: rgba(255, 255, 255, 0.13);  /* panel edge     */
+  --line-strong: rgba(255, 255, 255, 0.22);
+  --line-red: rgba(255, 46, 51, 0.45);
+
+  /* ---------- GLOW / ELEVATION ---------- */
+  --glow-red:    0 0 24px rgba(255, 46, 51, 0.45), 0 0 4px rgba(255, 46, 51, 0.6);
+  --glow-violet: 0 0 24px rgba(154, 77, 255, 0.4);
+  --glow-cyan:   0 0 20px rgba(47, 182, 255, 0.4);
+  --shadow-1: 0 1px 2px rgba(0,0,0,0.5);
+  --shadow-2: 0 8px 24px rgba(0,0,0,0.55);
+  --shadow-3: 0 20px 60px rgba(0,0,0,0.65);
+
+  /* ---------- RADII (sharp / technical — hard by default) ---------- */
+  --r-0: 0px;     /* default — hard edges        */
+  --r-1: 2px;     /* inputs, chips — the ceiling */
+  --r-2: 2px;     /* cards (kept minimal)        */
+  --r-pill: 999px;/* circular status dots only   */
+  --cut: 10px;    /* corner-notch size (clip-path)*/
+
+  /* ---------- SPACING (4px base grid) ---------- */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 64px;
+  --s-9: 96px;
+  --s-10: 128px;
+
+  /* ---------- TYPE FAMILIES ---------- */
+  --font-display: 'Chakra Petch', 'Space Grotesk', system-ui, sans-serif;
+  --font-body:    'Space Grotesk', system-ui, -apple-system, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+
+  /* ---------- TYPE SCALE (1.5rem base, fluid-ready) ---------- */
+  --t-display: 72px;   /* hero impact   */
+  --t-h1:      48px;
+  --t-h2:      34px;
+  --t-h3:      24px;
+  --t-h4:      18px;
+  --t-body:    16px;
+  --t-small:   14px;
+  --t-meta:    12px;   /* mono labels   */
+  --t-micro:   11px;
+
+  --lh-tight: 1.05;
+  --lh-snug:  1.25;
+  --lh-body:  1.6;
+
+  --tracking-label: 0.18em;  /* uppercase mono labels */
+  --tracking-tight: -0.01em;
+}
+
+/* ============================================================
+   SEMANTIC ELEMENT STYLES
+   Use as a reference layer; copy into components as needed.
+   ============================================================ */
+
+.ds-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--t-display);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg-0);
+  text-transform: uppercase;
+}
+
+h1, .ds-h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--t-h1);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg-0);
+}
+
+h2, .ds-h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--t-h2);
+  line-height: var(--lh-snug);
+  color: var(--fg-0);
+}
+
+h3, .ds-h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--t-h3);
+  line-height: var(--lh-snug);
+  color: var(--fg-0);
+}
+
+h4, .ds-h4 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--t-h4);
+  line-height: var(--lh-snug);
+  color: var(--fg-1);
+}
+
+p, .ds-body {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+  color: var(--fg-1);
+}
+
+small, .ds-small {
+  font-size: var(--t-small);
+  line-height: var(--lh-snug);
+  color: var(--fg-2);
+}
+
+/* Mono HUD label: // SECTION_01  ·  [ STATUS: ONLINE ] */
+.ds-label {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: var(--t-meta);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--fg-2);
+}
+
+.ds-label--accent { color: var(--red); }
+
+code, .ds-mono {
+  font-family: var(--font-mono);
+  font-size: var(--t-small);
+  color: var(--fg-1);
+}
+
+a, .ds-link {
+  color: var(--red);
+  text-decoration: none;
+  transition: color 0.15s ease, opacity 0.15s ease;
+}
+a:hover, .ds-link:hover { color: var(--red-bright); }
