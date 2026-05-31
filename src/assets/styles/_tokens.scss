@@ -1,0 +1,108 @@
+/* ============================================================
+   KLUBAL 3D — DESIGN TOKENS
+   Ported from design_handoff_portfolio/assets/colors_and_type.css
+   Technical / cyberpunk HUD aesthetic. Red + black, violet
+   secondary, project-driven accents (cyan, magenta, brass).
+   Fonts are loaded via <link> in index.html.
+   ============================================================ */
+
+:root {
+  /* ---------- CORE PALETTE (near-black, cool blue-violet tint) ---------- */
+  --bg-0: #06070a; /* deepest void  */
+  --bg-1: #0b0d12; /* page          */
+  --bg-2: #11141b; /* panel         */
+  --bg-3: #181c26; /* raised / card */
+  --bg-4: #232836; /* hover / input */
+
+  /* ---------- FOREGROUND / NEUTRALS (cool grey ramp) ---------- */
+  --fg-0: #f4f6fa; /* primary text       */
+  --fg-1: #c2c8d4; /* secondary          */
+  --fg-2: #818a9c; /* muted / meta       */
+  --fg-3: #525a6b; /* faint / disabled   */
+  --fg-4: #333a48; /* hairline-on-dark   */
+
+  /* ---------- PRIMARY: SIGNAL RED ---------- */
+  --red-bright: #ff4b45; /* hover / glow peak */
+  --red: #ff2e33; /* primary accent    */
+  --red-deep: #c8131c; /* pressed / deep    */
+  --red-dim: #5a1418; /* tonal fill        */
+  --red-ghost: rgba(255, 46, 51, 0.12);
+
+  /* ---------- SECONDARY: ELECTRIC VIOLET ---------- */
+  --violet-bright: #b57bff;
+  --violet: #9a4dff;
+  --violet-deep: #6a1fd0;
+  --violet-ghost: rgba(154, 77, 255, 0.12);
+
+  /* ---------- PROJECT-DRIVEN ACCENTS ---------- */
+  --cyan: #2fb6ff; /* deluxo neon underglow */
+  --magenta: #ff3d8a; /* hope rose planet      */
+  --brass: #e0a23c; /* steampunk gears       */
+  --acid: #b6ff3c; /* rare hazard highlight */
+
+  /* ---------- SEMANTIC ---------- */
+  --success: #35d07f;
+  --warning: #e0a23c;
+  --danger: #ff2e33;
+  --info: #2fb6ff;
+
+  --accent: var(--red);
+  --accent-bright: var(--red-bright);
+  --accent-deep: var(--red-deep);
+
+  /* ---------- BORDERS / HAIRLINES ---------- */
+  --line-1: rgba(255, 255, 255, 0.07);
+  --line-2: rgba(255, 255, 255, 0.13);
+  --line-strong: rgba(255, 255, 255, 0.22);
+  --line-red: rgba(255, 46, 51, 0.45);
+
+  /* ---------- GLOW / ELEVATION ---------- */
+  --glow-red: 0 0 24px rgba(255, 46, 51, 0.45), 0 0 4px rgba(255, 46, 51, 0.6);
+  --glow-violet: 0 0 24px rgba(154, 77, 255, 0.4);
+  --glow-cyan: 0 0 20px rgba(47, 182, 255, 0.4);
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-2: 0 8px 24px rgba(0, 0, 0, 0.55);
+  --shadow-3: 0 20px 60px rgba(0, 0, 0, 0.65);
+
+  /* ---------- RADII (sharp / technical) ---------- */
+  --r-0: 0px;
+  --r-1: 2px;
+  --r-2: 2px;
+  --r-pill: 999px;
+  --cut: 10px; /* corner-notch size (clip-path) */
+
+  /* ---------- SPACING (4px base grid) ---------- */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 64px;
+  --s-9: 96px;
+  --s-10: 128px;
+
+  /* ---------- TYPE FAMILIES ---------- */
+  --font-display: 'Chakra Petch', 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+
+  /* ---------- TYPE SCALE ---------- */
+  --t-display: 72px;
+  --t-h1: 48px;
+  --t-h2: 34px;
+  --t-h3: 24px;
+  --t-h4: 18px;
+  --t-body: 16px;
+  --t-small: 14px;
+  --t-meta: 12px;
+  --t-micro: 11px;
+
+  --lh-tight: 1.05;
+  --lh-snug: 1.25;
+  --lh-body: 1.6;
+
+  --tracking-label: 0.18em;
+  --tracking-tight: -0.01em;
+}

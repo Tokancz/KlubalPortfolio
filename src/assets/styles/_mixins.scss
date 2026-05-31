@@ -1,0 +1,60 @@
+/* ============================================================
+   SHARED SCSS MIXINS
+   Injected into every <style lang="scss"> block via Vite's
+   css.preprocessorOptions.scss.additionalData. These emit no CSS
+   until used, so global injection is free.
+   ============================================================ */
+
+/// Centered content column with responsive gutters.
+@mixin container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+
+  @include below-tablet {
+    padding: 0 22px;
+  }
+}
+
+/// Notched "corner-cut" silhouette — the signature shape language.
+/// Cuts the top-left and bottom-right corners by $size.
+@mixin corner-cut($size: 9px) {
+  clip-path: polygon(
+    #{$size} 0,
+    100% 0,
+    100% calc(100% - #{$size}),
+    calc(100% - #{$size}) 100%,
+    0 100%,
+    0 #{$size}
+  );
+}
+
+/// Monospace HUD label: uppercase, tracked-out, muted.
+@mixin mono-label($size: 12px) {
+  font-family: var(--font-mono);
+  font-size: $size;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--fg-2);
+}
+
+/// The single responsive breakpoint used across the site.
+@mixin below-tablet {
+  @media (max-width: 880px) {
+    @content;
+  }
+}
+
+/// Desktop, fine-pointer, motion-allowed devices only.
+@mixin fine-pointer {
+  @media (hover: hover) and (pointer: fine) {
+    @content;
+  }
+}
+
+/// Honour users who ask for reduced motion.
+@mixin reduced-motion {
+  @media (prefers-reduced-motion: reduce) {
+    @content;
+  }
+}
