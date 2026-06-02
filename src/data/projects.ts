@@ -191,19 +191,6 @@ const projectMeta: ProjectMeta[] = [
       Year: '2024',
     },
   },
-  {
-    key: 'placeholder',
-    title: 'Placeholder',
-    kind: 'WIP',
-    year: '2026',
-    accent: '--cyan',
-    tools: ['Blender'],
-    blurb: ['Blank stub project — here only to preview how the grid handles an empty tile.'],
-    specs: {
-      Engine: 'Cycles',
-      Year: '2026',
-    },
-  },
   /* @new-project-anchor */
 ]
 
