@@ -39,7 +39,7 @@ const revealDelay = (i: number) => (i % 6) * 0.05
   // uniform tile, and `dense` backfills the gaps so any number of projects pack
   // neatly and wrap to new rows. Spans are set per-card in ProjectCard.vue.
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   grid-auto-rows: 292px;
   grid-auto-flow: dense;
   gap: 18px;

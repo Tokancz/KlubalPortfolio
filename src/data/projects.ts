@@ -1,19 +1,32 @@
 /**
  * Data-driven portfolio projects.
  *
- * Images are auto-discovered from `src/assets/images/projects/<key>/*` — no
+ * Media is auto-discovered from `src/assets/images/projects/<key>/*` — no
  * manual imports. Each project = one folder; the files inside (sorted by name,
- * e.g. 01.jpg, 02.jpg) become that project's gallery, first = cover.
+ * e.g. 01.jpg, 02.mp4, 03.jpg) become that project's gallery. Images AND
+ * videos (.mp4/.webm/.mov) are supported; the first IMAGE is the cover used by
+ * the grid card and the site hero backdrop.
  *
  * To ADD a project:    npm run new-project <key>   (then drop photos in + fill the stub)
  * To REMOVE a project: npm run remove-project <key>
  *
  * `idx` ("001") is derived from order below, so you never hand-maintain it.
- * imagetools (see vite.config.ts) resizes/compresses every image at build time.
+ * imagetools (see vite.config.ts) resizes/compresses every image at build time;
+ * videos are served as-is, so keep them reasonably sized.
  */
 
 /** A design token name used as a per-project accent colour. */
 export type AccentVar = '--red' | '--magenta' | '--cyan' | '--brass'
+
+/** Whether a gallery item is a still image or a video clip. */
+export type MediaKind = 'image' | 'video'
+
+/** One gallery item — an auto-discovered image or video. */
+export interface Media {
+  type: MediaKind
+  /** Resolved asset URL (images run through imagetools; videos served as-is). */
+  src: string
+}
 
 /** Hand-authored fields for a project (everything except images + derived idx). */
 export interface ProjectMeta {
@@ -33,13 +46,15 @@ export interface ProjectMeta {
   specs: Record<string, string>
 }
 
-/** A fully resolved project: metadata + auto-discovered images + derived index. */
+/** A fully resolved project: metadata + auto-discovered media + derived index. */
 export interface Project extends ProjectMeta {
   /** Zero-padded display index, e.g. "001" — derived from order. */
   idx: string
-  /** All gallery image URLs for this project, in filename order. */
+  /** All gallery items (images + videos) for this project, in filename order. */
+  media: Media[]
+  /** Just the image URLs, in filename order (subset of `media`). */
   images: string[]
-  /** First image, used as the grid/card thumbnail. */
+  /** First image, used as the grid/card thumbnail and site hero backdrop. */
   cover: string
 }
 
@@ -48,18 +63,32 @@ export interface Project extends ProjectMeta {
  * (import.meta.glob does not resolve the `@` alias) and the query runs each
  * file through imagetools → resized to ≤2560px wide, re-encoded JPEG q80.
  */
-const files = import.meta.glob<string>(
+const imageFiles = import.meta.glob<string>(
   '../assets/images/projects/*/*.{jpg,jpeg,png}',
   { eager: true, import: 'default', query: { w: 2560, format: 'jpg', quality: 80 } },
 )
 
-/** Group image URLs by their `<key>` folder, sorted by path for stable order. */
-const imagesByKey: Record<string, string[]> = {}
-for (const path of Object.keys(files).sort()) {
+/** Eagerly import every project video as a plain URL (no transform). */
+const videoFiles = import.meta.glob<string>(
+  '../assets/images/projects/*/*.{mp4,webm,mov}',
+  { eager: true, import: 'default' },
+)
+
+/**
+ * Group all media by `<key>` folder. Images and videos are merged and sorted
+ * together by full path, so interleaving by filename (01.jpg, 02.mp4, …) works
+ * and each project's items stay contiguous and ordered.
+ */
+const mediaByKey: Record<string, Media[]> = {}
+const entries: { path: string; type: MediaKind; src: string }[] = [
+  ...Object.entries(imageFiles).map(([path, src]) => ({ path, type: 'image' as const, src })),
+  ...Object.entries(videoFiles).map(([path, src]) => ({ path, type: 'video' as const, src })),
+].sort((a, b) => a.path.localeCompare(b.path))
+
+for (const { path, type, src } of entries) {
   const match = path.match(/\/projects\/([^/]+)\//)
   if (!match) continue
-  const key = match[1]
-  ;(imagesByKey[key] ??= []).push(files[path])
+  ;(mediaByKey[match[1]] ??= []).push({ type, src })
 }
 
 /**
@@ -99,6 +128,7 @@ const projectMeta: ProjectMeta[] = [
     tools: ['Blender', 'Cycles', 'Davinci Resolve'],
     blurb: [
       'Hope is a short film about a big Earths mission to save humanity from an extinction-level asteroid. I made it as a student project to practice storytelling and animation, and to explore a more painterly style.',
+      'In this project I got to do everything — modeling, texturing, lighting, animation, compositing and editing. The animation itself was a fun challenge.',
     ],
     specs: {
       Engine: 'Cycles',
@@ -116,7 +146,7 @@ const projectMeta: ProjectMeta[] = [
     tools: ['Blender', 'Cycles'],
     blurb: [
       'A retro-future car inspired by Back to the future and GTA5 with neon underglow, caught mid-motion on a coastal overpass. Motion blur and a shallow depth of field keep the eye on the light.',
-      'My study in animating a believable speed shot — the rig, the road, and the rim light all built to read at 24fps.',
+      'My study in animating a believable speed shot — the rig, the road, and the rim light.',
     ],
     specs: {
       Engine: 'Cycles',
@@ -161,15 +191,30 @@ const projectMeta: ProjectMeta[] = [
       Year: '2024',
     },
   },
+  {
+    key: 'placeholder',
+    title: 'Placeholder',
+    kind: 'WIP',
+    year: '2026',
+    accent: '--cyan',
+    tools: ['Blender'],
+    blurb: ['Blank stub project — here only to preview how the grid handles an empty tile.'],
+    specs: {
+      Engine: 'Cycles',
+      Year: '2026',
+    },
+  },
   /* @new-project-anchor */
 ]
 
-/** Resolved projects: metadata merged with auto-discovered images + derived idx. */
+/** Resolved projects: metadata merged with auto-discovered media + derived idx. */
 export const projects: Project[] = projectMeta.map((meta, i) => {
-  const images = imagesByKey[meta.key] ?? []
+  const media = mediaByKey[meta.key] ?? []
+  const images = media.filter((m) => m.type === 'image').map((m) => m.src)
   return {
     ...meta,
     idx: String(i + 1).padStart(3, '0'),
+    media,
     images,
     cover: images[0] ?? '',
   }

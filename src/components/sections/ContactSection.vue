@@ -33,7 +33,7 @@ const links: ContactLink[] = [
 
     <div class="contact">
       <div class="contact__lead" v-reveal>
-        <p class="contact__big">Let's build<br />something<span class="contact__arrow"> ↗</span></p>
+        <p class="contact__big">Let's build<br />something<ArrowUpRight class="contact__arrow" /></p>
         <p class="contact__sub">
           Commissions, collaborations, or just want to talk renders? Drop me a line — I'm a student
           and always up for an interesting brief.
@@ -89,7 +89,13 @@ const links: ContactLink[] = [
   }
 
   &__arrow {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    margin-left: 0.06em;
+    vertical-align: -0.16em;
     color: var(--red);
+    stroke-width: 2.75;
   }
 
   &__sub {

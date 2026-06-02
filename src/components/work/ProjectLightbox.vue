@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onBeforeUnmount, ref, watch } from 'vue'
-import { X, ChevronLeft, ChevronRight } from 'lucide-vue-next'
-import type { Project } from '@/data/projects'
+import { X, ChevronLeft, ChevronRight, ArrowUp, Play } from 'lucide-vue-next'
+import type { Project, Media } from '@/data/projects'
 
 /**
  * Project detail overlay — a tall, vertically-scrolling "dossier" (ported from
@@ -18,6 +18,15 @@ const emit = defineEmits<{ close: []; 'update:index': [value: number] }>()
 const closeButton = ref<HTMLButtonElement>()
 const scrollBody = ref<HTMLElement>()
 
+// Show the scroll-to-top button once the dossier is scrolled past the hero.
+const showScrollTop = ref(false)
+const onScroll = () => {
+  showScrollTop.value = (scrollBody.value?.scrollTop ?? 0) > 120
+}
+const scrollToTop = () => {
+  scrollBody.value?.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
 const project = computed<Project | null>(() =>
   props.index === null ? null : (props.projects[props.index] ?? null),
 )
@@ -27,8 +36,27 @@ const counter = computed(() => {
   const total = props.projects.length
   return `${String(props.index + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`
 })
-// Hero uses the cover (images[0]); the rest become the "MORE SHOTS" gallery.
-const extraShots = computed(() => project.value?.images.slice(1) ?? [])
+// Hero shows the currently-selected media (cover image by default); clicking a
+// gallery thumbnail swaps it in. The gallery lists every shot — images and
+// videos — so you can always jump back to the cover.
+const coverMedia = computed<Media | null>(() =>
+  project.value ? { type: 'image', src: project.value.cover } : null,
+)
+const activeMedia = ref<Media | null>(null)
+const heroVideo = ref<HTMLVideoElement>()
+const gallery = computed<Media[]>(() => project.value?.media ?? [])
+const hasGallery = computed(() => gallery.value.length > 1)
+const sameMedia = (a: Media | null, b: Media | null) => a?.src === b?.src
+
+// Clicking a gallery item swaps it into the hero, scrolls the panel back up so
+// the hero is in view, and — for videos — starts playback immediately.
+const selectMedia = (item: Media) => {
+  activeMedia.value = item
+  scrollBody.value?.scrollTo({ top: 0, behavior: 'smooth' })
+  if (item.type === 'video') {
+    nextTick(() => heroVideo.value?.play().catch(() => {}))
+  }
+}
 
 const step = (direction: -1 | 1) => {
   if (props.index === null) return
@@ -48,6 +76,8 @@ watch(
   () => props.index,
   (value) => {
     if (value === null) return
+    activeMedia.value = coverMedia.value
+    showScrollTop.value = false
     nextTick(() => {
       if (scrollBody.value) scrollBody.value.scrollTop = 0
       closeButton.value?.focus()
@@ -101,9 +131,19 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown))
             </div>
 
             <!-- scroll body -->
-            <div ref="scrollBody" class="lb-scroll">
-              <div class="lb-hero">
-                <img :src="project.cover" :alt="project.title" />
+            <div ref="scrollBody" class="lb-scroll" @scroll="onScroll">
+              <div class="lb-hero" :class="{ 'is-video': activeMedia?.type === 'video' }">
+                <video
+                  v-if="activeMedia?.type === 'video'"
+                  ref="heroVideo"
+                  :key="activeMedia.src"
+                  :src="activeMedia.src"
+                  :poster="project.cover"
+                  controls
+                  autoplay
+                  playsinline
+                />
+                <img v-else :src="activeMedia?.src ?? project.cover" :alt="project.title" />
                 <div class="lb-hero-grad" aria-hidden="true" />
                 <div class="lb-hero-cap">
                   <div class="lb-kind">// {{ project.kind.toUpperCase() }} · {{ project.year }}</div>
@@ -128,24 +168,50 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown))
                   </div>
                 </div>
 
-                <template v-if="extraShots.length">
+                <template v-if="hasGallery">
                   <div class="lb-gallery-head">
                     <span class="mlabel">// MORE SHOTS <span class="ac">— GALLERY</span></span>
-                    <span class="muted">{{ String(extraShots.length).padStart(2, '0') }} {{ extraShots.length === 1 ? 'SHOT' : 'SHOTS' }}</span>
+                    <span class="muted">{{ String(gallery.length).padStart(2, '0') }} {{ gallery.length === 1 ? 'SHOT' : 'SHOTS' }}</span>
                   </div>
-                  <div class="lb-gallery" :data-n="extraShots.length">
-                    <img
-                      v-for="(src, i) in extraShots"
-                      :key="src"
+                  <div class="lb-gallery" :data-n="gallery.length">
+                    <button
+                      v-for="(item, i) in gallery"
+                      :key="item.src"
                       class="lb-shot"
-                      :src="src"
-                      :alt="`${project.title} — shot ${i + 2}`"
-                      loading="lazy"
-                    />
+                      type="button"
+                      :class="{ 'is-active': sameMedia(item, activeMedia), 'is-video': item.type === 'video' }"
+                      :aria-label="item.type === 'video' ? `Play clip ${i + 1}` : `Show shot ${i + 1}`"
+                      :aria-pressed="sameMedia(item, activeMedia)"
+                      @click="selectMedia(item)"
+                    >
+                      <video
+                        v-if="item.type === 'video'"
+                        :src="item.src"
+                        :poster="project.cover"
+                        muted
+                        preload="metadata"
+                      />
+                      <img v-else :src="item.src" :alt="`${project.title} — shot ${i + 1}`" loading="lazy" />
+                      <span v-if="item.type === 'video'" class="lb-play" aria-hidden="true">
+                        <Play class="ic" />
+                      </span>
+                    </button>
                   </div>
                 </template>
               </div>
             </div>
+
+            <Transition name="lb-top-btn">
+              <button
+                v-if="showScrollTop"
+                class="lb-scrolltop"
+                type="button"
+                aria-label="Scroll to top"
+                @click="scrollToTop"
+              >
+                <ArrowUp class="ic" />
+              </button>
+            </Transition>
           </div>
         </div>
       </div>
@@ -318,11 +384,25 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown))
   overflow: hidden;
   background: #06070a;
 
-  img {
+  img,
+  video {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
+  }
+
+  // When a video is playing in the hero, letterbox it (no crop) and drop the
+  // title/gradient overlay so it can't sit over the player controls.
+  &.is-video {
+    video {
+      object-fit: contain;
+    }
+
+    .lb-hero-grad,
+    .lb-hero-cap {
+      display: none;
+    }
   }
 
   @include below-tablet {
@@ -499,12 +579,115 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown))
 }
 
 .lb-shot {
+  position: relative;
   width: 100%;
   aspect-ratio: 4 / 3;
-  object-fit: cover;
+  padding: 0;
   display: block;
   border: 1px solid var(--line-2);
   background: var(--bg-2);
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 0.15s, transform 0.15s;
+
+  img,
+  video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: opacity 0.15s;
+  }
+
+  &:hover {
+    border-color: var(--lb-accent);
+
+    img,
+    video {
+      opacity: 0.82;
+    }
+
+    .lb-play {
+      background: var(--lb-accent);
+      color: #fff;
+      border-color: var(--lb-accent);
+    }
+  }
+
+  &.is-active {
+    border-color: var(--lb-accent);
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      box-shadow: inset 0 0 0 2px var(--lb-accent);
+      pointer-events: none;
+    }
+  }
+}
+
+/* play badge on video thumbnails */
+.lb-play {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(8, 10, 14, 0.62);
+  color: #fff;
+  pointer-events: none;
+  transition: 0.15s;
+
+  :deep(svg) {
+    width: 18px;
+    height: 18px;
+    margin-left: 2px;
+    fill: currentColor;
+  }
+}
+
+/* scroll-to-top button (floats over the scroll body, bottom-right) */
+.lb-scrolltop {
+  position: absolute;
+  z-index: 7;
+  right: 18px;
+  bottom: 18px;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line-2);
+  background: rgba(11, 13, 18, 0.94);
+  backdrop-filter: blur(8px);
+  color: var(--fg-1);
+  cursor: pointer;
+  transition: 0.15s;
+
+  &:hover {
+    border-color: var(--lb-accent);
+    color: var(--lb-accent);
+  }
+
+  :deep(svg) {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.lb-top-btn-enter-active,
+.lb-top-btn-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.lb-top-btn-enter-from,
+.lb-top-btn-leave-to {
+  opacity: 0;
+  transform: translateY(8px);
 }
 
 /* overlay fade (whole lightbox) */
