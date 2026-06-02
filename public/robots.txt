@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://klubal.com/sitemap.xml
+Sitemap: https://klubal.art/sitemap.xml
