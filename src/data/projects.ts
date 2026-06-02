@@ -6,11 +6,11 @@
  * NOTE: the `specs` figures are sample/placeholder values from the
  * handoff — confirm real numbers with the artist before shipping.
  */
-import railgunImg from '@/assets/images/railgun.png'
-import hopeImg from '@/assets/images/hope.png'
-import deluxoImg from '@/assets/images/deluxo.png'
-import steampunkImg from '@/assets/images/steampunk.png'
-import ornithopterImg from '@/assets/images/ornithopter.png'
+import railgunImg from '@/assets/images/railgun.jpg'
+import hopeImg from '@/assets/images/hope.jpg'
+import deluxoImg from '@/assets/images/deluxo.jpg'
+import steampunkImg from '@/assets/images/steampunk.jpg'
+import ornithopterImg from '@/assets/images/ornithopter.jpg'
 
 /** A design token name used as a per-project accent colour. */
 export type AccentVar = '--red' | '--magenta' | '--cyan' | '--brass'

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import portraitImg from '@/assets/images/matyas_klubal.png'
+import portraitImg from '@/assets/images/matyas_klubal.jpg'
 import SectionHeader from '@/components/ui/SectionHeader.vue'
 import MonoLabel from '@/components/ui/MonoLabel.vue'
 import SkillMeter from '@/components/about/SkillMeter.vue'

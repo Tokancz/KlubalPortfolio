@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ArrowUpRight, Mail, ChevronDown } from 'lucide-vue-next'
-import heroImg from '@/assets/images/hope.png'
+import heroImg from '@/assets/images/hope.jpg'
 import MonoLabel from '@/components/ui/MonoLabel.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 </script>
