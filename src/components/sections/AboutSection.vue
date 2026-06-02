@@ -39,13 +39,12 @@ const skills = [
         <div class="about__copy">
           <p>
             I'm Matyáš Klubal — a student, no degree yet, just a lot of renders. I model
-            hard-surface sci-fi and like building cyber-leaning scenes: machines, vehicles, and the
-            worlds they live in.
+            hard-surface sci-fi and also like building cyber-leaning scenes: machines, vehicles.
           </p>
           <p>
-            Most of my work lives in Blender, where I've spent the last four years learning
+            Most of my work is done in Blender, where I've spent the last four years learning
             modeling, lighting and texturing one project at a time. I'm picking up Affinity for
-            texture and post, and just started exploring Houdini for procedural detail.
+            texture, and just started exploring Houdini for procedural detail and simulation.
           </p>
         </div>
 
