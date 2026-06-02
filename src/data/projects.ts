@@ -1,39 +1,31 @@
 /**
- * Static portfolio project data, ported from the design handoff's
- * `site.js` PROJECTS / ORDER. Order here defines the Work grid layout
- * and the lightbox prev/next sequence.
+ * Data-driven portfolio projects.
  *
- * NOTE: the `specs` figures are sample/placeholder values from the
- * handoff — confirm real numbers with the artist before shipping.
+ * Images are auto-discovered from `src/assets/images/projects/<key>/*` — no
+ * manual imports. Each project = one folder; the files inside (sorted by name,
+ * e.g. 01.jpg, 02.jpg) become that project's gallery, first = cover.
+ *
+ * To ADD a project:    npm run new-project <key>   (then drop photos in + fill the stub)
+ * To REMOVE a project: npm run remove-project <key>
+ *
+ * `idx` ("001") is derived from order below, so you never hand-maintain it.
+ * imagetools (see vite.config.ts) resizes/compresses every image at build time.
  */
-import railgunImg from '@/assets/images/railgun.jpg'
-import hopeImg from '@/assets/images/hope.jpg'
-import deluxoImg from '@/assets/images/deluxo.jpg'
-import steampunkImg from '@/assets/images/steampunk.jpg'
-import ornithopterImg from '@/assets/images/ornithopter.jpg'
 
 /** A design token name used as a per-project accent colour. */
 export type AccentVar = '--red' | '--magenta' | '--cyan' | '--brass'
 
-/** Position in the asymmetric Work grid (see grid-template-areas). */
-export type GridArea = 'f' | 'a' | 'b' | 'c' | 'd'
-
-export interface Project {
-  /** Stable key used for routing within the lightbox. */
+/** Hand-authored fields for a project (everything except images + derived idx). */
+export interface ProjectMeta {
+  /** Stable key — must match the folder name under images/projects/. */
   key: string
-  /** Zero-padded display index, e.g. "001". */
-  idx: string
   title: string
   kind: string
   year: string
   /** Design-token name for the accent colour. */
   accent: AccentVar
-  /** Bundled image URL. */
-  img: string
-  /** Whether this is the large 2×2 featured tile. */
-  featured: boolean
-  /** Named grid area for the Work layout. */
-  area: GridArea
+  /** Whether this is the large 2×2 featured tile in the grid. */
+  featured?: boolean
   tools: string[]
   /** One paragraph per entry. */
   blurb: string[]
@@ -41,17 +33,51 @@ export interface Project {
   specs: Record<string, string>
 }
 
-export const projects: Project[] = [
+/** A fully resolved project: metadata + auto-discovered images + derived index. */
+export interface Project extends ProjectMeta {
+  /** Zero-padded display index, e.g. "001" — derived from order. */
+  idx: string
+  /** All gallery image URLs for this project, in filename order. */
+  images: string[]
+  /** First image, used as the grid/card thumbnail. */
+  cover: string
+}
+
+/**
+ * Eagerly import + optimize every project image. The glob path is relative
+ * (import.meta.glob does not resolve the `@` alias) and the query runs each
+ * file through imagetools → resized to ≤2560px wide, re-encoded JPEG q80.
+ */
+const files = import.meta.glob<string>(
+  '../assets/images/projects/*/*.{jpg,jpeg,png}',
+  { eager: true, import: 'default', query: { w: 2560, format: 'jpg', quality: 80 } },
+)
+
+/** Group image URLs by their `<key>` folder, sorted by path for stable order. */
+const imagesByKey: Record<string, string[]> = {}
+for (const path of Object.keys(files).sort()) {
+  const match = path.match(/\/projects\/([^/]+)\//)
+  if (!match) continue
+  const key = match[1]
+  ;(imagesByKey[key] ??= []).push(files[path])
+}
+
+/**
+ * Project metadata, in display order. Order here defines the Work grid layout
+ * and the lightbox prev/next sequence. The featured project becomes the 2×2
+ * tile; everything else flows as uniform tiles.
+ *
+ * NOTE: some `specs` figures are sample/placeholder values — confirm real
+ * numbers before shipping a new piece.
+ */
+const projectMeta: ProjectMeta[] = [
   {
     key: 'railgun',
-    idx: '001',
     title: 'Railgun',
     kind: 'Hard-Surface',
     year: '2025',
     accent: '--red',
-    img: railgunImg,
     featured: true,
-    area: 'f',
     tools: ['Blender', 'Cycles', 'Substance'],
     blurb: [
       'A Six-legged siege drone built around a top-mounted railgun. The brief I set myself: read as a threat from silhouette alone, then reward a closer look with mechanical detail.',
@@ -66,14 +92,10 @@ export const projects: Project[] = [
   },
   {
     key: 'hope',
-    idx: '002',
     title: 'Hope',
     kind: 'Short film',
     year: '2026',
     accent: '--magenta',
-    img: hopeImg,
-    featured: false,
-    area: 'a',
     tools: ['Blender', 'Cycles', 'Davinci Resolve'],
     blurb: [
       'Hope is a short film about a big Earths mission to save humanity from an extinction-level asteroid. I made it as a student project to practice storytelling and animation, and to explore a more painterly style.',
@@ -87,14 +109,10 @@ export const projects: Project[] = [
   },
   {
     key: 'deluxo',
-    idx: '003',
     title: 'Deluxo',
     kind: 'Vehicle',
     year: '2025',
     accent: '--cyan',
-    img: deluxoImg,
-    featured: false,
-    area: 'b',
     tools: ['Blender', 'Cycles'],
     blurb: [
       'A retro-future car inspired by Back to the future and GTA5 with neon underglow, caught mid-motion on a coastal overpass. Motion blur and a shallow depth of field keep the eye on the light.',
@@ -109,14 +127,10 @@ export const projects: Project[] = [
   },
   {
     key: 'steampunk',
-    idx: '004',
     title: 'Skyport',
     kind: 'Environment',
     year: '2024',
     accent: '--brass',
-    img: steampunkImg,
-    featured: false,
-    area: 'c',
     tools: ['Blender', 'Cycles'],
     blurb: [
       'A sky full of brass airships and balloon-craft over open cloud. A warm, busy scene to practice instancing and atmospheric depth.',
@@ -133,14 +147,10 @@ export const projects: Project[] = [
   },
   {
     key: 'ornithopter',
-    idx: '005',
     title: 'Ornithopter',
     kind: 'Vehicle',
     year: '2024',
     accent: '--brass',
-    img: ornithopterImg,
-    featured: false,
-    area: 'd',
     tools: ['Blender'],
     blurb: [
       'A desert ornithopter from Dune, modeled on a clean seamless to focus purely on form and worn-metal texture.',
@@ -153,7 +163,19 @@ export const projects: Project[] = [
       Year: '2024',
     },
   },
+  /* @new-project-anchor */
 ]
+
+/** Resolved projects: metadata merged with auto-discovered images + derived idx. */
+export const projects: Project[] = projectMeta.map((meta, i) => {
+  const images = imagesByKey[meta.key] ?? []
+  return {
+    ...meta,
+    idx: String(i + 1).padStart(3, '0'),
+    images,
+    cover: images[0] ?? '',
+  }
+})
 
 /** Look a project up by its key. */
 export function findProject(key: string): Project | undefined {

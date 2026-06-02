@@ -12,6 +12,7 @@ const props = defineProps<{ projects: Project[]; index: number | null }>()
 const emit = defineEmits<{ close: []; 'update:index': [value: number] }>()
 
 const closeButton = ref<HTMLButtonElement>()
+const gallery = ref<HTMLElement>()
 
 const project = computed<Project | null>(() =>
   props.index === null ? null : (props.projects[props.index] ?? null),
@@ -36,11 +37,15 @@ const onKeydown = (e: KeyboardEvent) => {
   else if (e.key === 'ArrowRight') step(1)
 }
 
-// Move focus to the close button when the lightbox opens.
+// On open / project change: reset the gallery to the top and focus the close button.
 watch(
   () => props.index,
   (value) => {
-    if (value !== null) nextTick(() => closeButton.value?.focus())
+    if (value === null) return
+    nextTick(() => {
+      if (gallery.value) gallery.value.scrollTop = 0
+      closeButton.value?.focus()
+    })
   },
 )
 
@@ -71,9 +76,17 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown))
               <ChevronRight />
             </button>
 
-            <div class="lb__image">
-              <img :src="project.img" :alt="project.title" />
-              <span class="lb__image-fade" aria-hidden="true" />
+            <div class="lb__media">
+              <div ref="gallery" class="lb__gallery">
+                <img
+                  v-for="(src, i) in project.images"
+                  :key="src"
+                  class="lb__shot"
+                  :src="src"
+                  :alt="`${project.title} — image ${i + 1}`"
+                  loading="lazy"
+                />
+              </div>
               <span class="lb__chip">{{ project.idx }} / {{ project.key.toUpperCase() }}</span>
               <span class="lb__counter">{{ counter }}</span>
             </div>
@@ -170,23 +183,33 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown))
     background: var(--lb-accent);
   }
 
-  &__image {
+  // Positioning context for the scrollable gallery + its pinned chip/counter.
+  &__media {
     position: relative;
     min-height: 300px;
     overflow: hidden;
     background: #06070a;
 
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    @include below-tablet {
+      min-height: 0;
     }
   }
 
-  &__image-fade {
+  // Vertical-scroll gallery: photos stacked at natural aspect, scroll through them.
+  &__gallery {
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, transparent 70%, rgba(6, 7, 10, 0.4));
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+
+  &__shot {
+    display: block;
+    width: 100%;
+    height: auto;
   }
 
   &__chip {

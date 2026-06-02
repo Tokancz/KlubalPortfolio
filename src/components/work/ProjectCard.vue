@@ -13,7 +13,7 @@ const accentColor = `var(${props.project.accent})`
     class="pcard"
     :class="{ 'pcard--featured': project.featured }"
     type="button"
-    :style="{ gridArea: project.area, '--card-accent': accentColor }"
+    :style="{ '--card-accent': accentColor }"
     :aria-label="`Open project: ${project.title}`"
     @click="$emit('open', project.key)"
   >
@@ -22,7 +22,7 @@ const accentColor = `var(${props.project.accent})`
     <span class="pcard__view" aria-hidden="true">View ↗</span>
 
     <span class="pcard__thumb">
-      <img :src="project.img" :alt="project.title" />
+      <img :src="project.cover" :alt="project.title" />
     </span>
     <span class="pcard__grad" aria-hidden="true" />
 
@@ -53,6 +53,17 @@ const accentColor = `var(${props.project.accent})`
     border-color: var(--line-red);
     transform: translateY(-3px);
     box-shadow: var(--shadow-2);
+  }
+
+  // The featured project is the big 2×2 tile; others stay 1×1 (grid default).
+  &--featured {
+    grid-column: span 2;
+    grid-row: span 2;
+
+    @include below-tablet {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
   }
 
   &__thumb {

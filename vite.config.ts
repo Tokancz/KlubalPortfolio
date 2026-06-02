@@ -1,10 +1,13 @@
 import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import { imagetools } from 'vite-imagetools'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [vue()],
+  // imagetools resizes + recompresses project renders at import time (dev and
+  // build), reading the committed originals read-only — see src/data/projects.ts.
+  plugins: [vue(), imagetools()],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),

@@ -80,10 +80,11 @@ const skills = [
     margin: 0;
     overflow: hidden;
     border: 1px solid var(--line-2);
-    filter: grayscale(0.28) contrast(1.05);
 
     img {
       width: 100%;
+      // 1 = fully black & white, 0 = full colour. Dial down for a hint of colour.
+      filter: grayscale(.9) contrast(1.05);
     }
   }
 

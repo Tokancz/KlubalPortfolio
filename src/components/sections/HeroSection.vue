@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { ArrowUpRight, Mail, ChevronDown } from 'lucide-vue-next'
-import heroImg from '@/assets/images/hope.jpg'
+import { findProject } from '@/data/projects'
 import MonoLabel from '@/components/ui/MonoLabel.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
+
+// Reuse the optimized "Hope" cover from the projects data as the hero backdrop.
+const heroImg = findProject('hope')?.cover ?? ''
 </script>
 
 <template>
