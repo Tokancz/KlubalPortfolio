@@ -38,13 +38,15 @@ useBodyScrollLock(scrollLocked)
 </script>
 
 <template>
+  <a class="skip-link" href="#main">Skip to content</a>
+
   <AmbientBackdrop />
   <ScrollProgress :progress="progress" />
 
   <SiteNav :active-id="activeId" @open-menu="mobileMenuOpen = true" />
   <MobileMenu :open="mobileMenuOpen" @close="mobileMenuOpen = false" />
 
-  <main>
+  <main id="main" tabindex="-1">
     <HeroSection />
     <AboutSection />
     <WorkSection @open="openProject" />

@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import { ArrowUpRight, Mail, ChevronDown } from 'lucide-vue-next'
-import { findProject } from '@/data/projects'
+import { projects, findProject } from '@/data/projects'
 import MonoLabel from '@/components/ui/MonoLabel.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 
-// Reuse the optimized "Hope" cover from the projects data as the hero backdrop.
-const heroImg = findProject('hope')?.cover ?? ''
+// The hero backdrop AND the "now featuring" label both reflect one real
+// project, so the label can never drift from the image. Defaults to Hope,
+// falls back to the first project if that key is ever removed.
+const feature = findProject('hope') ?? projects[0]
+const heroImg = feature?.cover ?? ''
+
+// Derive the kicker year from the most recent project so it never goes stale.
+const latestYear = Math.max(...projects.map((p) => Number(p.year)))
 </script>
 
 <template>
@@ -19,7 +25,7 @@ const heroImg = findProject('hope')?.cover ?? ''
     <div class="hero__inner container">
       <MonoLabel dot class="hero__label">
         3D Artist · Blender
-        <template #accent>// 2025</template>
+        <template #accent>// {{ latestYear }}</template>
       </MonoLabel>
 
       <h1 class="hero__headline">
@@ -42,9 +48,9 @@ const heroImg = findProject('hope')?.cover ?? ''
       </div>
     </div>
 
-    <aside class="hero__feature">
+    <aside v-if="feature" class="hero__feature">
       <p class="hero__feature-kicker">// Now featuring</p>
-      <p class="hero__feature-name">VISIONÄRE — Station</p>
+      <p class="hero__feature-name">{{ feature.title }} — {{ feature.kind }}</p>
     </aside>
 
     <a class="hero__scroll scroll-cue" href="#about" aria-label="Scroll to about">

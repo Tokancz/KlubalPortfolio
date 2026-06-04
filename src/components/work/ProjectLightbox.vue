@@ -17,6 +17,9 @@ const emit = defineEmits<{ close: []; 'update:index': [value: number] }>()
 
 const closeButton = ref<HTMLButtonElement>()
 const scrollBody = ref<HTMLElement>()
+const dialogRoot = ref<HTMLElement>()
+/** The element focused before the dialog opened, restored on close. */
+const previouslyFocused = ref<HTMLElement | null>(null)
 
 // Show the scroll-to-top button once the dossier is scrolled past the hero.
 const showScrollTop = ref(false)
@@ -64,18 +67,52 @@ const step = (direction: -1 | 1) => {
   emit('update:index', (props.index + direction + total) % total)
 }
 
+// Keep Tab focus inside the dialog: wrap from the last focusable back to the
+// first (and vice-versa with Shift). Querying live each Tab covers the gallery
+// thumbnails and hero video controls appearing/disappearing as you navigate.
+const trapFocus = (e: KeyboardEvent) => {
+  const root = dialogRoot.value
+  if (!root) return
+  const focusable = Array.from(
+    root.querySelectorAll<HTMLElement>(
+      'button, [href], video[controls], [tabindex]:not([tabindex="-1"])',
+    ),
+  ).filter((el) => !el.hasAttribute('disabled') && el.offsetParent !== null)
+  if (focusable.length === 0) return
+  const first = focusable[0]
+  const last = focusable[focusable.length - 1]
+  const active = document.activeElement
+  if (e.shiftKey && active === first) {
+    e.preventDefault()
+    last.focus()
+  } else if (!e.shiftKey && active === last) {
+    e.preventDefault()
+    first.focus()
+  }
+}
+
 const onKeydown = (e: KeyboardEvent) => {
   if (props.index === null) return
   if (e.key === 'Escape') emit('close')
   else if (e.key === 'ArrowLeft') step(-1)
   else if (e.key === 'ArrowRight') step(1)
+  else if (e.key === 'Tab') trapFocus(e)
 }
 
-// On open / project change: reset the scroll body to the top and focus close.
+// On open: remember the trigger so focus can return to it on close. On open /
+// project change: reset the scroll body to the top and focus close. On close:
+// restore focus to whatever was focused before (the project card).
 watch(
   () => props.index,
-  (value) => {
-    if (value === null) return
+  (value, previous) => {
+    if (value !== null && previous == null) {
+      previouslyFocused.value = document.activeElement as HTMLElement | null
+    }
+    if (value === null) {
+      previouslyFocused.value?.focus?.()
+      previouslyFocused.value = null
+      return
+    }
     activeMedia.value = coverMedia.value
     showScrollTop.value = false
     nextTick(() => {
@@ -94,6 +131,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown))
     <Transition name="lb-fade">
       <div
         v-if="project"
+        ref="dialogRoot"
         class="lb"
         role="dialog"
         aria-modal="true"

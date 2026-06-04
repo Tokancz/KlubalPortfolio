@@ -50,6 +50,34 @@ section {
   scroll-margin-top: 60px;
 }
 
+/* Don't draw a focus ring around the whole <main> when the skip link targets it. */
+main:focus {
+  outline: none;
+}
+
+/* ---------- Skip-to-content link (keyboard users) ---------- */
+.skip-link {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 200;
+  padding: 10px 16px;
+  background: var(--red);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+
+  /* Off-screen until focused, then it springs into view. */
+  transform: translateY(-150%);
+  transition: transform 0.15s ease;
+
+  &:focus-visible {
+    transform: translateY(0);
+  }
+}
+
 /* ---------- Layout helpers (shared by every section) ---------- */
 .container {
   @include container;
