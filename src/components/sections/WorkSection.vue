@@ -44,9 +44,11 @@ const revealDelay = (i: number) => (i % 6) * 0.05
   grid-auto-flow: dense;
   gap: 18px;
 
+  // Stack into a single full-width column on mobile so titles have room to
+  // breathe instead of being squeezed into half-width tiles.
   @include below-tablet {
-    grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: 200px;
+    grid-template-columns: 1fr;
+    grid-auto-rows: 240px;
   }
 }
 </style>

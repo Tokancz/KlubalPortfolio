@@ -60,9 +60,10 @@ const accentColor = `var(${props.project.accent})`
     grid-column: span 2;
     grid-row: span 2;
 
+    // Single-column mobile grid: featured flows as a normal full-width tile.
     @include below-tablet {
-      grid-column: span 2;
-      grid-row: span 2;
+      grid-column: auto;
+      grid-row: auto;
     }
   }
 

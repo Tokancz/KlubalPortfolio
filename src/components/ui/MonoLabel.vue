@@ -23,6 +23,12 @@ withDefaults(defineProps<{ dot?: boolean }>(), { dot: false })
   gap: 9px;
   white-space: nowrap;
 
+  // Allow the kicker + accent suffix to wrap instead of overflowing on mobile.
+  @include below-tablet {
+    flex-wrap: wrap;
+    white-space: normal;
+  }
+
   &__accent {
     color: var(--red);
   }

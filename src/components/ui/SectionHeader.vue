@@ -40,6 +40,13 @@ defineProps<{
   margin-bottom: 46px;
   border-bottom: 1px solid var(--line-2);
 
+  // Stack the title and meta on mobile so the two nowrap lines never overlap.
+  @include below-tablet {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
   &__lead {
     flex: 1;
     min-width: 0;
@@ -54,6 +61,11 @@ defineProps<{
     letter-spacing: var(--tracking-tight);
     text-transform: uppercase;
     white-space: nowrap;
+
+    // Let long titles wrap instead of overflowing on narrow screens.
+    @include below-tablet {
+      white-space: normal;
+    }
   }
 
   &__meta {
