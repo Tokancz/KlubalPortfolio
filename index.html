@@ -15,10 +15,24 @@
     <!-- Fonts: Chakra Petch (display), Space Grotesk (body), JetBrains Mono (labels) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!--
+      Load fonts off the critical path: preload as a stylesheet, then flip to
+      rel="stylesheet" once fetched so it never blocks first paint. Only the
+      weights actually used (400/600/700) are requested. <noscript> covers
+      JS-disabled clients.
+    -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
+      />
+    </noscript>
 
     <!-- Primary meta -->
     <title>Matyáš Klubal — 3D Artist | Sci-Fi & Cyberpunk Renders in Blender</title>
@@ -47,7 +61,7 @@
     <meta property="og:image" content="https://klubal.art/og-image.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="675" />
-    <meta property="og:image:alt" content="The VISIONÄRE orbital station rendered over a rose-colored planet — work by Matyáš Klubal." />
+    <meta property="og:image:alt" content="Hard-surface sci-fi render by Matyáš Klubal, 3D artist working in Blender." />
     <meta property="og:locale" content="en_US" />
 
     <!-- Twitter / X Card -->
@@ -79,8 +93,8 @@
         ]
       }
     </script>
-    <script type="module" crossorigin src="/assets/index-ClWnyCyU.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-BwXQ1S96.css">
+    <script type="module" crossorigin src="/assets/index-DyZ14F0g.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-aESZd7oq.css">
   </head>
   <body>
     <div id="app"></div>
