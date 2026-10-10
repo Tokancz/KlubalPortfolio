@@ -8,6 +8,9 @@ export const siteUrl = 'https://klubal.art'
 
 export const email = 'matyasklubal@gmail.com'
 
+/** Usage terms + privacy policy page (legal.html, served extensionless). */
+export const legalPath = '/legal'
+
 export const instagram = {
   handle: '@tunakos_',
   url: 'https://www.instagram.com/tunakos_/',

@@ -13,6 +13,15 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
+  build: {
+    rolldownOptions: {
+      // Two pages: the portfolio and the usage/privacy page (served as /legal).
+      input: {
+        main: fileURLToPath(new URL('./index.html', import.meta.url)),
+        legal: fileURLToPath(new URL('./legal.html', import.meta.url)),
+      },
+    },
+  },
   css: {
     preprocessorOptions: {
       scss: {

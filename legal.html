@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Fonts: Chakra Petch (display), Space Grotesk (body), JetBrains Mono (labels) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!--
+      Load fonts off the critical path: preload as a stylesheet, then flip to
+      rel="stylesheet" once fetched so it never blocks first paint. Only the
+      weights actually used (400/600/700) are requested. <noscript> covers
+      JS-disabled clients.
+    -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
+      />
+    </noscript>
+
+    <!-- Primary meta -->
+    <title>Usage &amp; Privacy — Matyáš Klubal</title>
+    <meta
+      name="description"
+      content="How you may use Matyáš Klubal's artwork (personal use is fine, commercial use needs written permission) and how klubal.art handles your data."
+    />
+    <meta name="author" content="Matyáš Klubal" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#0a0a0c" />
+    <link rel="canonical" href="https://klubal.art/legal" />
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/legal.ts"></script>
+  </body>
+</html>

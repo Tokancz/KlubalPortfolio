@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import portraitImg from '@/assets/images/matyas_klubal.jpg'
 import { projects } from '@/data/projects'
-import { siteUrl, email, instagram, cv, skills } from '@/data/profile'
+import { siteUrl, email, instagram, cv, skills, legalPath } from '@/data/profile'
 
 /**
  * Print-only, shortened portfolio — hidden on screen, it replaces the whole
@@ -12,6 +12,8 @@ import { siteUrl, email, instagram, cv, skills } from '@/data/profile'
 const siteLabel = siteUrl.replace(/^https?:\/\//, '')
 const projectsUrl = `${siteUrl}/#projects`
 const cvUrl = `${siteUrl}${cv.href}`
+const legalUrl = `${siteUrl}${legalPath}`
+const year = new Date().getFullYear()
 </script>
 
 <template>
@@ -78,6 +80,11 @@ const cvUrl = `${siteUrl}${cv.href}`
         </a>
       </div>
     </section>
+
+    <footer class="ps-foot">
+      © {{ year }} Matyáš Klubal. All artwork is free for personal use; any commercial use requires
+      my written permission — <a :href="legalUrl">{{ siteLabel }}{{ legalPath }}</a>
+    </footer>
   </article>
 </template>
 
@@ -180,7 +187,7 @@ const cvUrl = `${siteUrl}${cv.href}`
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--ink-3);
-      line-height: 1.7 * 8.5 / 6.5;
+      line-height: 2.2;
     }
 
     a {
@@ -323,6 +330,18 @@ const cvUrl = `${siteUrl}${cv.href}`
 
   span:last-child {
     font-size: 7.5pt;
+    color: var(--ink-2);
+  }
+}
+.ps-foot {
+  margin-top: 8mm;
+  padding-top: 3mm;
+  border-top: 1px solid var(--rule);
+  break-inside: avoid;
+  font-size: 7pt;
+  color: var(--ink-3);
+
+  a {
     color: var(--ink-2);
   }
 }

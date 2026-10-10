@@ -1,4 +1,20 @@
 User-agent: *
 Allow: /
 
+# Opt out of AI training / text-and-data mining (see klubal.art/legal, section 1.2).
+# These only block AI crawlers — normal search indexing is unaffected.
+User-agent: GPTBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: anthropic-ai
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: CCBot
+User-agent: Bytespider
+User-agent: meta-externalagent
+User-agent: PerplexityBot
+User-agent: Omgilibot
+User-agent: Diffbot
+Disallow: /
+
 Sitemap: https://klubal.art/sitemap.xml

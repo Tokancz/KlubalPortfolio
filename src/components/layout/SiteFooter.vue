@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import BrandMark from '@/components/ui/BrandMark.vue'
+import { legalPath } from '@/data/profile'
+
+const year = new Date().getFullYear()
 </script>
 
 <template>
@@ -7,7 +10,10 @@ import BrandMark from '@/components/ui/BrandMark.vue'
     <div class="container">
       <div class="foot__bar">
         <BrandMark />
-        <p class="foot__note">© 2025 MATYÁŠ KLUBAL · RENDERED IN BLENDER</p>
+        <p class="foot__note">
+          © {{ year }} MATYÁŠ KLUBAL · ALL RIGHTS RESERVED ·
+          <a class="foot__link" :href="legalPath">USAGE &amp; PRIVACY</a>
+        </p>
       </div>
     </div>
   </footer>
@@ -35,6 +41,17 @@ import BrandMark from '@/components/ui/BrandMark.vue'
     font-size: 11px;
     letter-spacing: 0.1em;
     color: var(--fg-3);
+  }
+
+  &__link {
+    color: var(--fg-2);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: 0.15s;
+
+    &:hover {
+      color: var(--red);
+    }
   }
 }
 </style>

@@ -1,9 +1,10 @@
 <script setup lang="ts">
-/** The "MK" monogram + "Klubal." wordmark. Links back to the hero. */
+/** The "MK" monogram + "Klubal." wordmark. Links back to the hero by default. */
+withDefaults(defineProps<{ href?: string }>(), { href: '#home' })
 </script>
 
 <template>
-  <a class="brand" href="#home" aria-label="Klubal — back to top">
+  <a class="brand" :href="href" aria-label="Klubal — back to top">
     <span class="brand__mono" aria-hidden="true">MK</span>
     <span class="brand__wordmark">Klubal<span class="brand__stop">.</span></span>
   </a>
