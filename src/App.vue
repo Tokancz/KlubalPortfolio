@@ -18,8 +18,9 @@ import WorkSection from '@/components/sections/WorkSection.vue'
 import ContactSection from '@/components/sections/ContactSection.vue'
 import SiteFooter from '@/components/layout/SiteFooter.vue'
 import ProjectLightbox from '@/components/work/ProjectLightbox.vue'
+import PrintResume from '@/components/print/PrintResume.vue'
 
-const activeId = useActiveSection(['home', 'about', 'work', 'contact'])
+const activeId = useActiveSection(['home', 'about', 'projects', 'contact'])
 const { progress, showBackToTop } = useScrollProgress()
 const prefersReducedMotion = useReducedMotion()
 
@@ -63,4 +64,6 @@ useBodyScrollLock(scrollLocked)
     :projects="projects"
     @close="lightboxIndex = null"
   />
+
+  <PrintResume />
 </template>

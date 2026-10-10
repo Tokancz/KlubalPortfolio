@@ -13,11 +13,11 @@ const revealDelay = (i: number) => (i % 6) * 0.05
 </script>
 
 <template>
-  <section id="work" class="section container">
+  <section id="projects" class="section container">
     <SectionHeader
       label="// SECTION_03"
       :accent="countLabel"
-      title="The work"
+      title="Projects"
       meta="CLICK ANY TILE"
     />
 

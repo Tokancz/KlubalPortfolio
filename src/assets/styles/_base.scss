@@ -135,3 +135,31 @@ main:focus {
     cursor: auto !important;
   }
 }
+
+/* ---------- Print / "Save as PDF" ----------
+   The site itself is dark, animated and media-heavy, so printing swaps it
+   for the compact résumé in PrintResume.vue: everything else is hidden. */
+@page {
+  size: A4;
+  margin: 14mm 14mm 12mm;
+}
+
+@media print {
+  html,
+  body {
+    background: #fff !important;
+    overflow: visible !important;
+    height: auto;
+  }
+
+  body {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* Also catches overlays teleported to <body>, like the lightbox. */
+  body > :not(#app),
+  #app > :not(.print-sheet) {
+    display: none !important;
+  }
+}

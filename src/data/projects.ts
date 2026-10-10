@@ -92,7 +92,7 @@ for (const { path, type, src } of entries) {
 }
 
 /**
- * Project metadata, in display order. Order here defines the Work grid layout
+ * Project metadata, in display order. Order here defines the Projects grid layout
  * and the lightbox prev/next sequence. The featured project becomes the 2×2
  * tile; everything else flows as uniform tiles.
  *

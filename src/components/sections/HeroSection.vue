@@ -39,8 +39,8 @@ const latestYear = Math.max(...projects.map((p) => Number(p.year)))
       </p>
 
       <div class="hero__cta">
-        <BaseButton href="#work" variant="primary" cut>
-          View the work <ArrowUpRight />
+        <BaseButton href="#projects" variant="primary" cut>
+          View projects <ArrowUpRight />
         </BaseButton>
         <BaseButton href="#contact" variant="ghost">
           <Mail /> Get in touch

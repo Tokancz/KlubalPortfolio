@@ -10,6 +10,6 @@ export interface NavLink {
 export const navLinks: NavLink[] = [
   { num: '01', id: 'home', label: 'Index' },
   { num: '02', id: 'about', label: 'About' },
-  { num: '03', id: 'work', label: 'Work' },
+  { num: '03', id: 'projects', label: 'Projects' },
   { num: '04', id: 'contact', label: 'Contact' },
 ]

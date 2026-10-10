@@ -3,12 +3,7 @@ import portraitImg from '@/assets/images/matyas_klubal.jpg'
 import SectionHeader from '@/components/ui/SectionHeader.vue'
 import MonoLabel from '@/components/ui/MonoLabel.vue'
 import SkillMeter from '@/components/about/SkillMeter.vue'
-
-const skills = [
-  { name: 'Blender', fill: 8, value: '4 YRS · CORE' },
-  { name: 'Affinity', fill: 3, value: 'BEGINNER' },
-  { name: 'Houdini', fill: 1, value: 'JUST STARTED' },
-]
+import { skills } from '@/data/profile'
 </script>
 
 <template>

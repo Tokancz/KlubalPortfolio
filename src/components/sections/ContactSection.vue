@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { Mail, Instagram, ArrowUpRight } from 'lucide-vue-next'
+import { Mail, Instagram, ArrowUpRight, FileText, Download, FileDown } from 'lucide-vue-next'
 import SectionHeader from '@/components/ui/SectionHeader.vue'
+import BaseButton from '@/components/ui/BaseButton.vue'
+import { email, instagram, cv } from '@/data/profile'
 
 interface ContactLink {
   icon: typeof Mail
@@ -11,15 +13,27 @@ interface ContactLink {
 }
 
 const links: ContactLink[] = [
-  { icon: Mail, label: '// EMAIL', value: 'matyasklubal@gmail.com', href: 'mailto:matyasklubal@gmail.com' },
+  { icon: Mail, label: '// EMAIL', value: email, href: `mailto:${email}` },
   {
     icon: Instagram,
     label: '// INSTAGRAM',
-    value: '@tunakos_',
-    href: 'https://www.instagram.com/tunakos_/',
+    value: instagram.handle,
+    href: instagram.url,
     external: true,
   },
 ]
+
+/**
+ * Opens the browser's print dialog, where the print-only résumé
+ * (PrintResume.vue) replaces the site. The title is swapped so
+ * "Save as PDF" suggests a sensible file name.
+ */
+const exportPdf = () => {
+  const previousTitle = document.title
+  document.title = 'Matyas-Klubal-Portfolio'
+  window.addEventListener('afterprint', () => (document.title = previousTitle), { once: true })
+  window.print()
+}
 </script>
 
 <template>
@@ -38,6 +52,11 @@ const links: ContactLink[] = [
           Commissions, collaborations, or just want to talk renders? Drop me a line — I'm a student
           and always up for an interesting brief.
         </p>
+        <div class="contact__cta">
+          <BaseButton variant="ghost" @click="exportPdf">
+            <FileDown /> Save page as PDF
+          </BaseButton>
+        </div>
       </div>
 
       <address class="contact__panel" v-reveal="0.08">
@@ -61,6 +80,29 @@ const links: ContactLink[] = [
           </span>
           <ArrowUpRight class="clink__arrow" />
         </a>
+
+        <!-- CV: the row opens the PDF in a new tab; the side button downloads it directly. -->
+        <div class="clink clink--split">
+          <a class="clink__main" :href="cv.href" target="_blank" rel="noopener">
+            <span class="clink__icon">
+              <FileText />
+            </span>
+            <span class="clink__text">
+              <span class="clink__label">// CV · PDF</span>
+              <span class="clink__value">View my CV</span>
+            </span>
+            <ArrowUpRight class="clink__arrow" />
+          </a>
+          <a
+            class="clink__download"
+            :href="cv.href"
+            :download="cv.fileName"
+            aria-label="Download CV as PDF"
+            title="Download CV"
+          >
+            <Download />
+          </a>
+        </div>
       </address>
     </div>
   </section>
@@ -104,6 +146,13 @@ const links: ContactLink[] = [
     font-size: 16px;
     line-height: 1.7;
     color: var(--fg-1);
+  }
+
+  &__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 30px;
   }
 
   &__panel {
@@ -210,9 +259,72 @@ const links: ContactLink[] = [
     transition: 0.16s;
   }
 
-  &:hover &__arrow {
+  &:hover &__arrow,
+  &__main:hover &__arrow {
     color: var(--red);
     transform: translate(2px, -2px);
+  }
+
+  // Split row: the hover treatment moves from the row onto its two links.
+  &--split {
+    padding: 0;
+    align-items: stretch;
+    gap: 0;
+
+    &:hover {
+      background: none;
+    }
+  }
+
+  &__main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 22px 24px;
+    transition: 0.16s ease;
+
+    &:hover {
+      background: var(--red-ghost);
+    }
+  }
+
+  &--split:hover &__icon {
+    border-color: var(--line-2);
+    color: var(--fg-1);
+  }
+
+  &--split:hover &__arrow {
+    color: var(--fg-3);
+    transform: none;
+  }
+
+  &__main:hover &__icon {
+    border-color: var(--red);
+    color: var(--red);
+  }
+
+  &__download {
+    flex-shrink: 0;
+    width: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-left: 1px solid var(--line-1);
+    color: var(--fg-2);
+    transition: 0.16s ease;
+
+    :deep(svg),
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    &:hover {
+      background: var(--red-ghost);
+      color: var(--red);
+    }
   }
 }
 </style>
