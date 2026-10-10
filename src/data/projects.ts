@@ -107,7 +107,7 @@ const projectMeta: ProjectMeta[] = [
     year: '2025',
     accent: '--red',
     featured: true,
-    tools: ['Blender', 'Cycles', 'Substance'],
+    tools: ['Blender', 'Cycles'],
     blurb: [
       'A Six-legged siege drone built around a top-mounted railgun. The brief I set myself: read as a threat from silhouette alone, then reward a closer look with mechanical detail.',
       'Hard-surface modeling with emissive red accents driving the mood. Lit on a neutral studio grey so the glow does the work.',
@@ -115,7 +115,7 @@ const projectMeta: ProjectMeta[] = [
     specs: {
       Engine: 'Cycles',
       Tris: '400K',
-      Maps: 'Mostly procedural',
+      Textures: 'Mostly procedural',
       Year: '2025',
     },
   },
@@ -151,7 +151,7 @@ const projectMeta: ProjectMeta[] = [
     specs: {
       Engine: 'Cycles',
       Tris: '190K',
-      Maps: 'Mostly procedural',
+      Textures: 'Mostly procedural',
       Year: '2025',
     },
   },
@@ -187,7 +187,7 @@ const projectMeta: ProjectMeta[] = [
     specs: {
       Engine: 'Cycles',
       Tris: '40K',
-      Maps: 'Mostly procedural',
+      Textures: 'Mostly procedural',
       Year: '2024',
     },
   },
