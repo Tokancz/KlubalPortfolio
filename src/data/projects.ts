@@ -101,22 +101,22 @@ for (const { path, type, src } of entries) {
  */
 const projectMeta: ProjectMeta[] = [
   {
-    key: 'railgun',
-    title: 'Railgun',
-    kind: 'Hard-Surface',
-    year: '2025',
+    key: 'rocket',
+    title: 'Project Space Shuttle',
+    kind: 'Short film',
+    year: '2026',
     accent: '--red',
     featured: true,
-    tools: ['Blender', 'Cycles'],
+    tools: ['Blender'],
     blurb: [
-      'A Six-legged siege drone built around a top-mounted railgun. The brief I set myself: read as a threat from silhouette alone, then reward a closer look with mechanical detail.',
-      'Hard-surface modeling with emissive red accents driving the mood. Lit on a neutral studio grey so the glow does the work.',
+      '3D promotional video for CzechITAcademy\'s Nebesa project (a conceptual space shuttle).',
+      'Presented at Future Forces Forum 2026.',
     ],
     specs: {
       Engine: 'Cycles',
-      Tris: '400K',
-      Textures: 'Mostly procedural',
-      Year: '2025',
+      Year: '2026',
+      Frames: '2500',
+      Duration: '1:40 min',
     },
   },
   {
@@ -151,7 +151,7 @@ const projectMeta: ProjectMeta[] = [
     specs: {
       Engine: 'Cycles',
       Tris: '190K',
-      Textures: 'Mostly procedural',
+      Textures: 'Procedural',
       Year: '2025',
     },
   },
@@ -169,7 +169,7 @@ const projectMeta: ProjectMeta[] = [
     specs: {
       Engine: 'Cycles',
       Tris: '4.5M',
-      Craft: '12 unique',
+      Airships: '8 unique',
       Year: '2024',
     },
   },
@@ -187,8 +187,27 @@ const projectMeta: ProjectMeta[] = [
     specs: {
       Engine: 'Cycles',
       Tris: '40K',
-      Textures: 'Mostly procedural',
+      Textures: 'Procedural',
       Year: '2024',
+    },
+  },
+  {
+    key: 'railgun',
+    title: 'Railgun',
+    kind: 'Hard-Surface',
+    year: '2025',
+    accent: '--red',
+    featured: true,
+    tools: ['Blender', 'Cycles'],
+    blurb: [
+      'A Six-legged siege drone built around a top-mounted railgun. The brief I set myself: read as a threat from silhouette alone, then reward a closer look with mechanical detail.',
+      'Hard-surface modeling with emissive red accents driving the mood. Lit on a neutral studio grey so the glow does the work.',
+    ],
+    specs: {
+      Engine: 'Cycles',
+      Tris: '400K',
+      Textures: 'Procedural',
+      Year: '2025',
     },
   },
   /* @new-project-anchor */
