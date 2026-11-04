@@ -24,7 +24,6 @@ withDefaults(defineProps<{ href?: string }>(), { href: '#home' })
     align-items: center;
     justify-content: center;
     border: 1.5px solid var(--red);
-    box-shadow: var(--glow-red);
     font-family: var(--font-display);
     font-weight: 700;
     font-size: 14px;

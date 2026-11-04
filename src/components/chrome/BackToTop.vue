@@ -12,6 +12,7 @@ const scrollToTop = () => {
   <button
     class="totop"
     :class="{ 'totop--show': show }"
+    :inert="!show"
     type="button"
     aria-label="Back to top"
     @click="scrollToTop"

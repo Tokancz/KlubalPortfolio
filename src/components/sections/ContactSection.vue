@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import { computed, ref } from 'vue'
 import { Mail, Instagram, ArrowUpRight, FileText, Download, FileDown } from 'lucide-vue-next'
 import SectionHeader from '@/components/ui/SectionHeader.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
-import { email, instagram, cv } from '@/data/profile'
+import { email, instagram, cvs } from '@/data/profile'
 
 interface ContactLink {
   icon: typeof Mail
@@ -22,6 +23,10 @@ const links: ContactLink[] = [
     external: true,
   },
 ]
+
+/** Which CV language the View / Download links point at. English by default. */
+const cvLang = ref(cvs[0].lang)
+const cv = computed(() => cvs.find((c) => c.lang === cvLang.value) ?? cvs[0])
 
 /**
  * Opens the browser's print dialog, where the print-only résumé
@@ -81,24 +86,49 @@ const exportPdf = () => {
           <ArrowUpRight class="clink__arrow" />
         </a>
 
-        <!-- CV: the row opens the PDF in a new tab; the side button downloads it directly. -->
+        <!--
+          CV: the row opens the PDF in a new tab; the EN/CZ switch picks the language
+          both links point at; the side button downloads it directly.
+        -->
         <div class="clink clink--split">
-          <a class="clink__main" :href="cv.href" target="_blank" rel="noopener">
+          <a
+            class="clink__main"
+            :href="cv.href"
+            :hreflang="cv.lang"
+            target="_blank"
+            rel="noopener"
+          >
             <span class="clink__icon">
               <FileText />
             </span>
             <span class="clink__text">
-              <span class="clink__label">// CV · PDF</span>
+              <span class="clink__label">// CV · PDF · {{ cv.tag }}</span>
               <span class="clink__value">View my CV</span>
             </span>
             <ArrowUpRight class="clink__arrow" />
           </a>
+          <div class="clink__lang" role="group" aria-label="CV language">
+            <button
+              v-for="version in cvs"
+              :key="version.lang"
+              type="button"
+              class="clink__lang-btn"
+              :class="{ 'is-active': version.lang === cvLang }"
+              :aria-pressed="version.lang === cvLang"
+              :aria-label="`${version.name} CV`"
+              :title="`${version.name} CV`"
+              @click="cvLang = version.lang"
+            >
+              {{ version.tag }}
+            </button>
+          </div>
           <a
             class="clink__download"
             :href="cv.href"
+            :hreflang="cv.lang"
             :download="cv.fileName"
-            aria-label="Download CV as PDF"
-            title="Download CV"
+            :aria-label="`Download ${cv.name} CV as PDF`"
+            :title="`Download CV (${cv.tag})`"
           >
             <Download />
           </a>
@@ -274,6 +304,22 @@ const exportPdf = () => {
     &:hover {
       background: none;
     }
+
+    // Narrow phones: three columns share the row, so trim the main link.
+    @media (max-width: 420px) {
+      .clink__main {
+        gap: 14px;
+        padding: 20px 16px;
+      }
+
+      .clink__arrow {
+        display: none;
+      }
+
+      .clink__download {
+        width: 52px;
+      }
+    }
   }
 
   &__main {
@@ -303,6 +349,45 @@ const exportPdf = () => {
   &__main:hover &__icon {
     border-color: var(--red);
     color: var(--red);
+  }
+
+  // EN / CZ switch — two stacked mono tags, the active one lit red.
+  &__lang {
+    flex-shrink: 0;
+    width: 52px;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid var(--line-1);
+  }
+
+  &__lang-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    background: none;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--fg-3);
+    cursor: pointer;
+    transition: 0.16s ease;
+
+    & + & {
+      border-top: 1px solid var(--line-1);
+    }
+
+    &:hover {
+      background: var(--red-ghost);
+      color: var(--fg-1);
+    }
+
+    &.is-active {
+      color: var(--red);
+      box-shadow: inset 2px 0 0 var(--red);
+    }
   }
 
   &__download {

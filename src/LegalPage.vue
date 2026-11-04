@@ -190,7 +190,7 @@ const siteLabel = siteUrl.replace(/^https?:\/\//, '')
         <p>
           The site links to Instagram (Meta Platforms Ireland Ltd.) and other external sites. Those
           services only receive data once you follow a link, and their own privacy policies apply.
-          The CV you can open or download is a static file served from this site.
+          The CVs (English and Czech) you can open or download are static files served from this site.
         </p>
 
         <h3>2.7 Your rights</h3>

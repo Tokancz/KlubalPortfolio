@@ -16,11 +16,38 @@ export const instagram = {
   url: 'https://www.instagram.com/tunakos_/',
 }
 
-/** CV served from /public. `fileName` is what the browser saves it as. */
-export const cv = {
-  href: '/Matyas-Klubal-CV.pdf',
-  fileName: 'Matyas-Klubal-CV.pdf',
+export interface CvVersion {
+  /** BCP 47 code, used for `hreflang` on the links. */
+  lang: string
+  /** Short tag shown on the language switch. */
+  tag: string
+  /** Full language name, for labels and screen readers. */
+  name: string
+  href: string
+  /** What the browser saves the file as. */
+  fileName: string
 }
+
+/** CVs served from /public. The first one is the default (the site is in English). */
+export const cvs: CvVersion[] = [
+  {
+    lang: 'en',
+    tag: 'EN',
+    name: 'English',
+    href: '/Matyas-Klubal-CV-EN.pdf',
+    fileName: 'Matyas-Klubal-CV-EN.pdf',
+  },
+  {
+    lang: 'cs',
+    tag: 'CZ',
+    name: 'Czech',
+    href: '/Matyas-Klubal-CV-CZ.pdf',
+    fileName: 'Matyas-Klubal-CV-CZ.pdf',
+  },
+]
+
+/** Default CV — linked from the print résumé. */
+export const cv = cvs[0]
 
 export interface Skill {
   name: string

@@ -8,7 +8,8 @@ defineEmits<{ close: [] }>()
 </script>
 
 <template>
-  <div class="msheet" :class="{ 'msheet--open': open }" :aria-hidden="!open">
+  <!-- `inert` while closed: the off-screen sheet (close button included) can't be focused or read. -->
+  <div class="msheet" :class="{ 'msheet--open': open }" :inert="!open">
     <button class="msheet__close" type="button" aria-label="Close menu" @click="$emit('close')">
       <X />
     </button>
@@ -17,7 +18,6 @@ defineEmits<{ close: [] }>()
         v-for="link in navLinks"
         :key="link.id"
         :href="`#${link.id}`"
-        :tabindex="open ? 0 : -1"
         @click="$emit('close')"
       >
         <span class="msheet__num">{{ link.num }}</span>{{ link.label }}
